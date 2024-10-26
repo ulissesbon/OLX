@@ -8,19 +8,15 @@ app = FastAPI()
 def home():
     return {"mensagem": "Olá mundo 2024.2"}
 
-@app.get('/profile')
-def profile():
-    return {"nome": "Ulisses Bonfim"}
+@app.get('/saudacao/{nome}')
+def saudacao(nome: str):
+    texto = f'Olá {nome}, bem vindo!'
+    
+    return {"mensagem": texto}
 
-@app.post('/profile')
-def signup():
-    return {"mensagem": "Perfil criado com sucesso"}
+@app.get('/quadrado/{numero}')
+def quadrado(numero: int):
+    resultado = numero * numero
+    texto = f'O quadrade de {numero} é {resultado}'
 
-@app.put('/profile')
-def att():
-    return {"mensagem": "Perfil atualizado com sucesso"}
-
-@app.delete('/profile')
-def delete():
-    return {"mensagem": "Perfil deletado com sucesso"}
-
+    return {"mensagem": texto}
