@@ -1,7 +1,26 @@
 from fastapi import FastAPI
 
+
 app = FastAPI()
 
+
 @app.get('/')
-async def root():
+def home():
     return {"mensagem": "Olá mundo 2024.2"}
+
+@app.get('/profile')
+def profile():
+    return {"nome": "Ulisses Bonfim"}
+
+@app.post('/profile')
+def signup():
+    return {"mensagem": "Perfil criado com sucesso"}
+
+@app.post('/profile')
+def att():
+    return {"mensagem": "Perfil atualizado com sucesso"}
+
+@app.post('/profile')
+def delete():
+    return {"mensagem": "Perfil deletado com sucesso"}
+
