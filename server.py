@@ -16,11 +16,11 @@ def profile():
 def signup():
     return {"mensagem": "Perfil criado com sucesso"}
 
-@app.post('/profile')
+@app.put('/profile')
 def att():
     return {"mensagem": "Perfil atualizado com sucesso"}
 
-@app.post('/profile')
+@app.delete('/profile')
 def delete():
     return {"mensagem": "Perfil deletado com sucesso"}
 
