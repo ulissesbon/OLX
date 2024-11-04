@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
-    <script src="index.js"></script>
+    <script src="index.js" defer></script>  <!-- referenciando java script -->
+    <link rel="stylesheet" href="index.css">  <!-- referenciando css -->
     <title>AppAnimal</title>
 </head>
 <body>
     <h1>AppAnimal - aplicativo para animais</h1>
     <h2>Novo animal</h2>
-    <form id="form_animal">
+    <form id="form-animal">
         <input type="text" id="nome" placeholder="Digite o nome do animal">
         <input type="submit" value="Gravar">
     </form>
