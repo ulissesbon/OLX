@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Depends, status
 from sqlalchemy.orm import Session
+from typing import List
 from src.schemas import schemas
 from src.schemas.schemas import Produto, ProdutoSimples
 from src.infra.sqlalchemy.config.database import get_db, criar_db
@@ -21,8 +22,8 @@ def criar_produto(produto: schemas.Produto, db: Session= Depends(get_db)):
 
 
 
-@app.get('/produtos', status_code=status.HTTP_200_OK)
-def listar_produto(db: Session = Depends(get_db)):
+@app.get('/produtos', status_code=status.HTTP_200_OK, response_model=List[ProdutoSimples])
+def listar_produtos(db: Session = Depends(get_db)):
     produtos = RepositorioProduto(db).listar()
 
     return produtos
@@ -47,6 +48,6 @@ def criar_usuario(usuario: schemas.Usuario, db: Session= Depends(get_db)):
 
 
 @app.get('/usuarios')
-def listar_produto(db: Session = Depends(get_db)):
+def listar_produtos(db: Session = Depends(get_db)):
     usuarios = RepositorioUsuario(db).listar()
     return usuarios

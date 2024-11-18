@@ -16,7 +16,7 @@ class Usuario(BaseModel):
 
 
 class Produto(BaseModel):
-    id: Optional[str] = None
+    id: Optional[int] = None
     # dono: Usuario
     nome: str
     descricao: str
@@ -28,7 +28,7 @@ class Produto(BaseModel):
 
 
 class ProdutoSimples(BaseModel):
-    id: Optional[str] = None
+    id: Optional[int] = None
     # dono: Usuario
     nome: str
     preco: float
