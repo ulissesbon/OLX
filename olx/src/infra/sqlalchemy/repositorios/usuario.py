@@ -1,3 +1,4 @@
+from sqlalchemy import delete, select
 from sqlalchemy.orm import Session
 from src.schemas import schemas
 from src.infra.sqlalchemy.models import models
@@ -25,9 +26,15 @@ class RepositorioUsuario():
         return usuarios
 
 
-    def obter(self):
-        pass
+    def obter(self, usuario_id: int):
+        stmt = select(models.Usuario).filter_by(id= usuario_id)
+        usuario = self.db.execute(stmt).scalar_one()
+
+        return usuario
 
 
-    def remover(self):
-        pass
+    def remover(self, usuario_id: int):
+        stmt = delete(models.Usuario).where(models.Usuario.id == usuario_id)
+
+        self.db.execute(stmt)
+        self.db.commit()

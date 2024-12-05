@@ -21,7 +21,6 @@ def criar_produto(produto: schemas.Produto, db: Session= Depends(get_db)):
     return produto_criado
 
 
-
 @app.get('/produtos', status_code=status.HTTP_200_OK, response_model=List[ProdutoSimples])
 def listar_produtos(db: Session = Depends(get_db)):
     produtos = RepositorioProduto(db).listar()
@@ -38,7 +37,9 @@ def obter_produto(produto_id: int, db: Session = Depends(get_db)):
 def deletar_produto(produto_id: int, db: Session= Depends(get_db)):
     RepositorioProduto(db).remover(produto_id)
 
-    return{'Msg': 'Removido com sucesso'}
+    return{'Msg': 'Produto removido com sucesso'}
+
+
 
 
 @app.post('/usuario')
@@ -48,6 +49,18 @@ def criar_usuario(usuario: schemas.Usuario, db: Session= Depends(get_db)):
 
 
 @app.get('/usuarios')
-def listar_produtos(db: Session = Depends(get_db)):
+def listar_usuarios(db: Session = Depends(get_db)):
     usuarios = RepositorioUsuario(db).listar()
     return usuarios
+
+
+@app.get('/usuario/{usuario_id}')
+def obter_usuario(usuario_id: int, db: Session = Depends(get_db)):
+    return RepositorioUsuario(db).obter(usuario_id)
+
+
+@app.delete('/usuarios/{usuario_id}')
+def deletar_usuario(usuario_id: int, db: Session= Depends(get_db)):
+    RepositorioUsuario(db).remover(usuario_id)
+
+    return{'Msg': 'Usuario removido com sucesso'}
