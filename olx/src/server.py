@@ -41,14 +41,14 @@ def deletar_produto(produto_id: int, db: Session= Depends(get_db)):
     return{'Msg': 'Produto removido com sucesso'}
 
 
-@app.put('/produtos/{produto_id}')
+@app.put('/produtos/{produto_id}', response_model= ProdutoSimples)
 def atualizar_produto(produto_id: int, produto: Produto, db: Session= Depends(get_db)):
 
     produto.id = produto_id
 
-    RepositorioProduto(db).editar(produto)
+    RepositorioProduto(db).editar(produto_id, produto)
 
-    return {f"Mensagem": "Produto atualizado"}
+    return produto
 
 
 
@@ -62,8 +62,9 @@ def criar_usuario(usuario: Usuario, db: Session= Depends(get_db)):
     return usuario_criado
 
 
-@app.get('/usuarios')
-# @app.get('/usuarios', response_model= List[Usuario])
+
+# @app.get('/usuarios')#, response_model= Usuario)
+@app.get('/usuarios', response_model= List[Usuario])
 def listar_usuarios(db: Session = Depends(get_db)):
     usuarios = RepositorioUsuario(db).listar()
     return usuarios
