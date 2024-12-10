@@ -26,7 +26,12 @@ def listar_produtos(db: Session = Depends(get_db)):
 
 @router.get('/view/{produto_id}')
 def obter_produto(produto_id: int, db: Session = Depends(get_db)):
-    return RepositorioProduto(db).obter(produto_id)
+    produto_encontrado = RepositorioProduto(db).obter(produto_id)
+
+    if not produto_encontrado:
+        raise HTTPException(status_code=404)
+    return produto_encontrado
+
 
 
 @router.delete('/delete/{produto_id}')
