@@ -26,3 +26,11 @@ class Usuario(Base):
     senha = Column(String)
 
     produtos = relationship('Produto', back_populates='usuario')
+
+    def to_dict(self):
+        data = {
+            "id": self.id,
+            "nome": self.nome,
+        }
+
+        return data

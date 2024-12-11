@@ -1,4 +1,4 @@
-from sqlalchemy import delete, select
+from sqlalchemy import delete, select, update
 from sqlalchemy.orm import Session
 from src.schemas import schemas
 from src.infra.sqlalchemy.models import models
@@ -31,7 +31,7 @@ class RepositorioUsuario():
 
     def obter(self, usuario_id: int):
         stmt = select(models.Usuario).filter_by(id= usuario_id)
-        usuario = self.db.execute(stmt).scalar_one()
+        usuario = self.db.execute(stmt).scalar()
 
         return usuario
 
@@ -41,3 +41,24 @@ class RepositorioUsuario():
 
         self.db.execute(stmt)
         self.db.commit()
+
+
+    def editar(self, id_usuario: int, usuario: schemas.Usuario):
+        
+        usuario_existente = self.db.query(models.Usuario).filter(models.Usuario.id == usuario.id).first()
+        if not usuario_existente:
+            raise HTTPException(status_code=404, detail= "Usuario não encontrado")
+        
+        update_stmt = update(models.Usuario
+                             ).where(models.Usuario.id == id_usuario
+                                     ).values(
+                                            nome = usuario.nome,
+                                            telefone = usuario.telefone,
+                                            senha = usuario.senha,
+                                            )
+        
+        self.db.execute(update_stmt)
+        self.db.commit()
+
+
+    
