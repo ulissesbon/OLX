@@ -3,7 +3,7 @@ from src.infra.sqlalchemy.config.database import Base
 from sqlalchemy.orm import relationship
 
 # instância do modelo orm
-class Produto(Base):
+class Pedido(Base):
     __tablename__ = 'produto'
 
     id = Column(Integer, primary_key=True, index=True)
@@ -44,7 +44,7 @@ class Pedido(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     quantidade = Column(Integer)
-    local_entrega = Column(String)
+    endereco_entrega = Column(String)
     entrega = Column(Boolean)
     observacoes = Column(String)
 

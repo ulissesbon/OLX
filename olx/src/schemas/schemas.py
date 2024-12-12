@@ -42,12 +42,16 @@ class Produto(BaseModel):
 
 class Pedido(BaseModel):
     id: Optional[int] = None
-    usuario: Usuario
-    # produto: Produto
     quantidade: int
-    entrega: bool = True
-    endereco: str
+    endereco_entrega: Optional[str]
+    entrega: bool = True    # True = entrega, False = retirada
     observacoes: Optional[str] = 'Sem observação!'
+
+    usuario_id: Optional[int]
+    produto_id: Optional[int]
+
+    usuario: Optional[Usuario]
+    produto: Optional[ProdutoSimples]
 
     class Config:
         orm_mode = True
