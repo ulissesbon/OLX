@@ -1,6 +1,7 @@
 from sqlalchemy import delete, select, update
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
+from typing import List
 from src.schemas import schemas
 from src.infra.sqlalchemy.models import models
 
@@ -11,13 +12,14 @@ class RepositorioPedido():
         self.db = db
 
 
-    def criar(self, pedido: schemas.Pedido): # pega o schema do pedido e transforma para o banco de dados
+    def criar(self, pedido: schemas.PedidoSchema): # pega o schema do pedido e transforma para o banco de dados
         db_pedido = models.Pedido(
             quantidade = pedido.quantidade,
             endereco_entrega = pedido.endereco_entrega,
             entrega = pedido.entrega,
             observacoes = pedido.observacoes,
-            usuario_id = pedido.usuario_id,
+            vendedor_id = pedido.vendedor_id,
+            comprador_id = pedido.comprador_id,
             produto_id = pedido.produto_id,
             )
         
@@ -27,7 +29,7 @@ class RepositorioPedido():
         return db_pedido           # retorna para o solicitante
 
 
-    def listar(self):
+    def listar_todos(self):
         pedido = self.db.query(models.Pedido).all()
         return pedido
 
@@ -66,3 +68,11 @@ class RepositorioPedido():
         
         self.db.execute(update_stmt)
         self.db.commit()
+
+    def listar_pedidos_usuario(self, id_usuario: int) -> List[models.Pedido]:
+        pass
+
+    def listar_vendas_usuario(self, id_usuario: int) -> List[models.Pedido]:
+        pass
+
+    
