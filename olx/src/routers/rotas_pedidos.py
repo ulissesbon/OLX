@@ -35,7 +35,7 @@ def obter_pedido(pedido_id: int, db: Session = Depends(get_db)):
     return pedido_encontrado
 
 
-@router.get('/view/meus_pedidos/{usuario_id}', status_code=status.HTTP_200_OK, response_model= PedidoSchema)
+@router.get('/view/meus_pedidos/{usuario_id}', status_code=status.HTTP_200_OK, response_model= List[PedidoSchema])
 def obter_pedidos_usuario(usuario_id: int, db: Session = Depends(get_db)):
     pedidos_usuario = RepositorioPedido(db).listar_pedidos_usuario(usuario_id)
 
@@ -44,7 +44,7 @@ def obter_pedidos_usuario(usuario_id: int, db: Session = Depends(get_db)):
     return pedidos_usuario
 
 
-@router.get('/view/minhas_vendas/{usuario_id}', status_code=status.HTTP_200_OK, response_model= PedidoSchema)
+@router.get('/view/minhas_vendas/{usuario_id}', status_code=status.HTTP_200_OK, response_model= List[PedidoSchema])
 def obter_vendas_usuario(usuario_id: int, db: Session = Depends(get_db)):
     vendas_usuario = RepositorioPedido(db).listar_vendas_usuario(usuario_id)
 
