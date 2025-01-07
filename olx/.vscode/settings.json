@@ -1,7 +1,0 @@
-{
-    "files.exclude": {
-        "**/pycache": true,
-        "**/__init__.py": true
-    },
-    "makefile.configureOnOpen": false
-}
