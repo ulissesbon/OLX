@@ -28,29 +28,35 @@ def listar_pedidos(db: Session = Depends(get_db)):
 
 @router.get('/view/{pedido_id}', status_code=status.HTTP_200_OK, response_model= PedidoSchema)
 def obter_pedido(pedido_id: int, db: Session = Depends(get_db)):
-    pedido_encontrado = RepositorioPedido(db).obter(pedido_id)
-
-    if not pedido_encontrado:
+    
+    try:
+        pedido_encontrado = RepositorioPedido(db).obter(pedido_id)
+        return pedido_encontrado
+    
+    except:
         raise HTTPException(status_code=404)
-    return pedido_encontrado
 
 
-@router.get('/view/meus_pedidos/{usuario_id}', status_code=status.HTTP_200_OK, response_model= List[PedidoSchema])
+
+@router.get('/view/meus_pedidos/{usuario_id}', status_code=status.HTTP_200_OK)
 def obter_pedidos_usuario(usuario_id: int, db: Session = Depends(get_db)):
-    pedidos_usuario = RepositorioPedido(db).listar_pedidos_usuario(usuario_id)
 
-    if not pedidos_usuario:
+    try:
+        pedidos_usuario = RepositorioPedido(db).listar_pedidos_usuario(usuario_id)
+        return pedidos_usuario
+    
+    except:
         raise HTTPException(status_code=404)
-    return pedidos_usuario
 
 
-@router.get('/view/minhas_vendas/{usuario_id}', status_code=status.HTTP_200_OK, response_model= List[PedidoSchema])
+@router.get('/view/minhas_vendas/{usuario_id}', status_code=status.HTTP_200_OK)
 def obter_vendas_usuario(usuario_id: int, db: Session = Depends(get_db)):
-    vendas_usuario = RepositorioPedido(db).listar_vendas_usuario(usuario_id)
-
-    if not vendas_usuario: 
+    try:
+        vendas_usuario = RepositorioPedido(db).listar_vendas_usuario(usuario_id)
+        return vendas_usuario
+    
+    except:
         raise HTTPException(status_code=404)
-    return vendas_usuario
 
 
 @router.delete('/delete/{pedido_id}')

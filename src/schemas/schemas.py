@@ -42,7 +42,7 @@ class Produto(BaseModel):
 
 class PedidoSchema(BaseModel):
     id: Optional[int] = None
-    quantidade: int
+    quantidade: Optional[int]
     endereco_entrega: Optional[str]
     entrega: bool = True    # True = entrega, False = retirada
     observacoes: Optional[str] = 'Sem observação!'

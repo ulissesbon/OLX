@@ -36,9 +36,8 @@ class RepositorioPedido():
 
     def obter(self, pedido_id: int):
         stmt = select(models.Pedido).filter_by(id=pedido_id)
-        pedido = self.db.execute(stmt).scalar()
-        print(pedido)
-        return pedido
+        pedido = self.db.execute(stmt).one()
+        return pedido[0]
 
 
     def remover(self, pedido_id: int):
@@ -69,10 +68,17 @@ class RepositorioPedido():
         self.db.execute(update_stmt)
         self.db.commit()
 
-    def listar_pedidos_usuario(self, id_usuario: int) -> List[models.Pedido]:
-        pass
+    def listar_pedidos_usuario(self, id_usuario: int):
+        query = select(models.Pedido).where(models.Pedido.comprador_id == id_usuario)
+        resultado = self.db.execute(query).scalars().all()  
+        return resultado
 
-    def listar_vendas_usuario(self, id_usuario: int) -> List[models.Pedido]:
-        pass
+
+    def listar_vendas_usuario(self, id_usuario: int):
+        query = select(models.Pedido, models.Produto)\
+            .join_from(models.Pedido, models.Produto)\
+            .where(models.Produto.usuario_id == id_usuario)
+        resultado = self.db.execute(query).scalars().all()  
+        return resultado
 
     

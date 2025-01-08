@@ -26,6 +26,7 @@ def listar_produtos(db: Session = Depends(get_db)):
 
 @router.get('/view/{produto_id}')
 def obter_produto(produto_id: int, db: Session = Depends(get_db)):
+    
     produto_encontrado = RepositorioProduto(db).obter(produto_id)
 
     if not produto_encontrado:
