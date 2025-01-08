@@ -25,6 +25,14 @@ class Usuario(BaseModel):
     class Config:
         orm_mode = True
 
+class UsuarioSimples(BaseModel):
+    id: Optional[int] = None
+    nome: str
+    telefone: str
+
+    class Config:
+        orm_mode = True
+
 
 class Produto(BaseModel):
     id: Optional[int] = None

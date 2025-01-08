@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from routers import rotas_auth
 from src.infra.sqlalchemy.config.database import  get_db
-from src.routers import rotas_produtos, rotas_usuarios, rotas_pedidos
+from src.routers import rotas_produtos, rotas_pedidos
 
 
 
@@ -28,7 +29,7 @@ app.include_router(rotas_produtos.router)
 
 
 # ROTAS USUARIOS
-app.include_router(rotas_usuarios.router)
+app.include_router(rotas_auth.router)
 
 
 # ROTAS PEDIDOS
