@@ -4,7 +4,7 @@ from jose import jwt
 #JOSE Config vars
 SECRET_KEY = '9e2501934d067d71bb1c5850722a73d1'
 ALGORITHM = 'HS256'
-EXPIRES_IN_MINUTES = 30
+EXPIRES_IN_MINUTES = 300
 
 
 def criar_token_acesso(data: dict):

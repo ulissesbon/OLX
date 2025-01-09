@@ -34,7 +34,7 @@ class RepositorioPedido():
         return pedido
 
 
-    def obter(self, pedido_id: int):
+    def obter(self, pedido_id: int) -> models.Pedido:
         stmt = select(models.Pedido).filter_by(id=pedido_id)
         pedido = self.db.execute(stmt).one()
         return pedido[0]

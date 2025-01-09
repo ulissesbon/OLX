@@ -37,6 +37,13 @@ class RepositorioProduto():
         return produto
 
 
+    def obter_meus_produtos(self, id_usuario: int):
+        stmt = select(models.Produto).filter(models.Produto.usuario_id == id_usuario)
+        produtos = self.db.execute(stmt).scalars().all()
+        print(produtos)
+        return produtos
+    
+
     def remover(self, produto_id: int):
         stmt = delete(models.Produto).where(models.Produto.id == produto_id)
 

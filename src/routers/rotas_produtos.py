@@ -1,7 +1,8 @@
 from fastapi import APIRouter, status, Depends, HTTPException
 from typing import List
 from sqlalchemy.orm import Session
-from src.schemas.schemas import Produto, ProdutoSimples
+from src.routers.auth_utils import obter_usuario_logado
+from src.schemas.schemas import Produto, ProdutoSimples, Usuario
 from src.infra.sqlalchemy.config.database import get_db
 from src.infra.sqlalchemy.repositorios.repositorio_produto import RepositorioProduto
 
@@ -11,9 +12,9 @@ router = APIRouter(prefix="/produtos")
 # PRODUTOS
 
 @router.post('/add', status_code=status.HTTP_201_CREATED, response_model= ProdutoSimples)
-def criar_produto(produto: Produto, db: Session= Depends(get_db)):
+def criar_produto(produto: Produto, usuario: Usuario= Depends(obter_usuario_logado), db: Session= Depends(get_db)):
     produto_criado = RepositorioProduto(db).criar(produto)
-
+    produto_criado.usuario_id = usuario.id
     return produto_criado
 
 
@@ -33,6 +34,15 @@ def obter_produto(produto_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404)
     return produto_encontrado
 
+
+@router.get('/listar/meus_produtos', response_model= List[ProdutoSimples])
+def meus_produtos(usuario: Usuario = Depends(obter_usuario_logado), db: Session = Depends(get_db)):
+    
+    produtos_encontrados = RepositorioProduto(db).obter_meus_produtos(usuario.id)
+
+    if not produtos_encontrados:
+        raise HTTPException(status_code=404)
+    return produtos_encontrados
 
 
 @router.delete('/delete/{produto_id}')

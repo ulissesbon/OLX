@@ -1,7 +1,8 @@
 from fastapi import APIRouter, status, Depends, HTTPException
 from typing import List
 from sqlalchemy.orm import Session
-from src.schemas.schemas import PedidoSchema
+from src.routers.auth_utils import obter_usuario_logado
+from src.schemas.schemas import PedidoSchema, Usuario
 from src.infra.sqlalchemy.config.database import get_db
 from src.infra.sqlalchemy.repositorios.repositorio_pedido import RepositorioPedido
 
@@ -11,8 +12,10 @@ router = APIRouter(prefix="/pedidos")
 # PEDIDOS
 
 @router.post('/add', status_code=status.HTTP_201_CREATED)
-def criar_pedido(pedido: PedidoSchema, db: Session = Depends(get_db)):
+def criar_pedido(pedido= PedidoSchema, usuario: Usuario= Depends(obter_usuario_logado), db: Session = Depends(get_db)):
+
     pedido_realizado = RepositorioPedido(db).criar(pedido)
+    pedido_realizado.comprador_id = usuario.id
 
     return pedido_realizado
 
@@ -26,44 +29,51 @@ def listar_pedidos(db: Session = Depends(get_db)):
     return pedidos
 
 
-@router.get('/view/{pedido_id}', status_code=status.HTTP_200_OK, response_model= PedidoSchema)
-def obter_pedido(pedido_id: int, db: Session = Depends(get_db)):
+# @router.get('/view/{pedido_id}', status_code=status.HTTP_200_OK, response_model= PedidoSchema)
+# def obter_pedido(pedido_id: int, db: Session = Depends(get_db)):
     
-    try:
-        pedido_encontrado = RepositorioPedido(db).obter(pedido_id)
-        return pedido_encontrado
+#     try:
+#         pedido_encontrado = RepositorioPedido(db).obter(pedido_id)
+#         return pedido_encontrado
     
-    except:
-        raise HTTPException(status_code=404)
+#     except:
+#         raise HTTPException(status_code=404)
 
 
 
-@router.get('/view/meus_pedidos/{usuario_id}', status_code=status.HTTP_200_OK)
-def obter_pedidos_usuario(usuario_id: int, db: Session = Depends(get_db)):
+@router.get('/view/meus_pedidos', status_code=status.HTTP_200_OK)
+def obter_pedidos_usuario(usuario: Usuario= Depends(obter_usuario_logado), db: Session = Depends(get_db)):
 
     try:
-        pedidos_usuario = RepositorioPedido(db).listar_pedidos_usuario(usuario_id)
+        pedidos_usuario = RepositorioPedido(db).listar_pedidos_usuario(usuario.id)
         return pedidos_usuario
     
     except:
         raise HTTPException(status_code=404)
 
 
-@router.get('/view/minhas_vendas/{usuario_id}', status_code=status.HTTP_200_OK)
-def obter_vendas_usuario(usuario_id: int, db: Session = Depends(get_db)):
+@router.get('/view/minhas_vendas', status_code=status.HTTP_200_OK)
+def obter_vendas_usuario(usuario: Usuario= Depends(obter_usuario_logado), db: Session = Depends(get_db)):
+    
     try:
-        vendas_usuario = RepositorioPedido(db).listar_vendas_usuario(usuario_id)
+        vendas_usuario = RepositorioPedido(db).listar_vendas_usuario(usuario.id)
         return vendas_usuario
     
     except:
-        raise HTTPException(status_code=404)
+        raise HTTPException(status_code=404, detail= 'nao encontrado')
 
 
-@router.delete('/delete/{pedido_id}')
-def deletar_pedido(pedido_id: int, db: Session= Depends(get_db)):
-    RepositorioPedido(db).remover(pedido_id)
+@router.delete('/delete/{pedido_id}/meus_pedidos')
+def deletar_pedido(pedido_id: int, usuario: Usuario= Depends(obter_usuario_logado), db: Session= Depends(get_db)):
+    pedido = RepositorioPedido(db).obter(pedido_id)
+    
+    if pedido.comprador == usuario.id:
+        RepositorioPedido(db).remover(pedido_id)
+        return{'Msg': 'pedido removido com sucesso'}
 
-    return{'Msg': 'pedido removido com sucesso'}
+    else:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail= 'Pedido não encontrado')
+
 
 
 @router.put('/edit/{pedido_id}', response_model=PedidoSchema)
