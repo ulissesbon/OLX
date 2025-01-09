@@ -25,6 +25,7 @@ class Usuario(BaseModel):
     class Config:
         orm_mode = True
 
+
 class UsuarioSimples(BaseModel):
     id: Optional[int] = None
     nome: str
@@ -32,6 +33,11 @@ class UsuarioSimples(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class LoginData(BaseModel):
+    senha: str
+    telefone: str
 
 
 class Produto(BaseModel):
@@ -46,6 +52,7 @@ class Produto(BaseModel):
 
     class Config:
         orm_mode = True
+
 
 
 class PedidoSchema(BaseModel):

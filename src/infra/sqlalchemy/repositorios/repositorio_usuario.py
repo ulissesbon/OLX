@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from sqlalchemy import delete, select, update
 from sqlalchemy.orm import Session
 from src.schemas import schemas
@@ -25,13 +26,18 @@ class RepositorioUsuario():
     def listar(self):
         stmt = select(models.Usuario)
         usuarios = self.db.execute(stmt).scalars().all()
-        # usuarios = self.db.query(models.Usuario).all()
         return usuarios
 
 
     def obter(self, usuario_id: int):
         stmt = select(models.Usuario).filter_by(id= usuario_id)
         usuario = self.db.execute(stmt).scalar()
+
+        return usuario
+
+    def obter_por_telefone(self, telefone: str) -> models.Usuario:
+        stmt = select(models.Usuario).where(models.Usuario.telefone == telefone)
+        usuario = self.db.execute(stmt).scalars().first()
 
         return usuario
 

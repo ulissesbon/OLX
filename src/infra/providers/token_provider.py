@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta, timezone
-from jose import jwt  # type: ignore
-
+from jose import jwt  
 
 #JOSE Config vars
 SECRET_KEY = 'chave-secreta'
