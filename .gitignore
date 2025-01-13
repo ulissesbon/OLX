@@ -4,3 +4,4 @@ alembic*
 
 *pycache*
 .venv/
+log.txt

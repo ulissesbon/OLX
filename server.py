@@ -1,7 +1,8 @@
 import uvicorn
-from fastapi import FastAPI
+from fastapi import BackgroundTasks, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from src.infra.sqlalchemy.config.database import  get_db
+from src.jobs.write_notification import write_notification
 from src.routers import rotas_produtos, rotas_pedidos, rotas_auth, rotas_usuario
 
 
@@ -31,6 +32,31 @@ app.include_router(rotas_usuario.router)
 
 # ROTAS PEDIDOS
 app.include_router(rotas_pedidos.router)
+
+
+@app.post('/send_email/{email}')
+def enviar_email(email:str, background: BackgroundTasks):
+    background.add_task(write_notification,
+                        email, 'mensagem de teste')
+    
+    return {'Msg': 'Mensagem enviada'}
+
+
+@app.middleware('http')
+async def processamento_tempo_requisicao(request: Request, next):
+    print('interceptado')
+    
+    response = await next(request)
+
+    print('terminada interceptação')
+
+    return response
+
+
+
+
+
+
 
 
 
