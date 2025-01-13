@@ -3,3 +3,4 @@ alembic*
 *.db
 
 *pycache*
+.venv/
